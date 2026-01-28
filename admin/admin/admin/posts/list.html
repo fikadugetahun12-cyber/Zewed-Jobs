@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Posts - Admin Dashboard</title>
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .content-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .filter-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .filter-select {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+        }
+        
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 300px;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        .posts-table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .table-header {
+            display: grid;
+            grid-template-columns: 50px 2fr 1fr 120px 100px 120px;
+            padding: 15px 20px;
+            background: #f7fafc;
+            font-weight: 600;
+            color: #4a5568;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .table-row {
+            display: grid;
+            grid-template-columns: 50px 2fr 1fr 120px 100px 120px;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            align-items: center;
+        }
+        
+        .table-row:hover {
+            background: #f8f9fa;
+        }
+        
+        .post-thumbnail {
+            width: 40px;
+            height: 40px;
+            background: #f0f0f0;
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .post-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .post-title {
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .post-excerpt {
+            font-size: 14px;
+            color: #718096;
+            margin-top: 5px;
+        }
+        
+        .post-type {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .type-news {
+            background: #e6fffa;
+            color: #319795;
+        }
+        
+        .type-job {
+            background: #ebf8ff;
+            color: #3182ce;
+        }
+        
+        .type-event {
+            background: #faf5ff;
+            color: #805ad5;
+        }
+        
+        .post-status {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .status-published {
+            background: #f0fff4;
+            color: #38a169;
+        }
+        
+        .status-draft {
+            background: #fed7d7;
+            color: #e53e3e;
+        }
+        
+        .status-pending {
+            background: #feebc8;
+            color: #d69e2e;
+        }
+        
+        .post-date {
+            font-size: 14px;
+            color: #718096;
+        }
+        
+        .post-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .edit-btn {
+            background: #ebf8ff;
+            color: #3182ce;
+        }
+        
+        .edit-btn:hover {
+            background: #3182ce;
+            color: white;
+        }
+        
+        .delete-btn {
+            background: #fed7d7;
+            color: #e53e3e;
+        }
+        
+        .delete-btn:hover {
+            background: #e53e3e;
+            color: white;
+        }
+        
+        .view-btn {
+            background: #f0fff4;
+            color: #38a169;
+        }
+        
+        .view-btn:hover {
+            background: #38a169;
+            color: white;
+        }
+        
+        .bulk-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+        }
+        
+        .bulk-select {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .page-btn {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .page-btn.active {
+            background: #3182ce;
+            color: white;
+            border-color: #3182ce;
+        }
+        
+        @media (max-width: 1024px) {
+            .table-header, .table-row {
+                grid-template-columns: 50px 1fr 100px 100px 100px;
+            }
+            
+            .post-date {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .table-header, .table-row {
+                grid-template-columns: 50px 1fr 80px 80px;
+                padding: 10px;
+            }
+            
+            .post-type {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar (same as dashboard) -->
+        <aside class="admin-sidebar">
+            <!-- Sidebar content from dashboard -->
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Header -->
+            <header class="admin-header">
+                <!-- Header content from dashboard -->
+            </header>
+            
+            <!-- Content -->
+            <div class="admin-content">
+                <div class="content-header">
+                    <div>
+                        <h1 class="content-title">All Posts</h1>
+                        <p class="content-subtitle">Manage blog posts, jobs, and events</p>
+                    </div>
+                    <div class="content-actions">
+                        <button class="btn btn-primary" onclick="createNewPost()">
+                            <i class="fas fa-plus"></i> New Post
+                        </button>
+                        <button class="btn btn-outline" onclick="exportPosts()">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchPosts" placeholder="Search posts...">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Type:</label>
+                        <select class="filter-select" id="filterType">
+                            <option value="all">All Types</option>
+                            <option value="news">News</option>
+                            <option value="job">Jobs</option>
+                            <option value="event">Events</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Status:</label>
+                        <select class="filter-select" id="filterStatus">
+                            <option value="all">All Status</option>
+                            <option value="published">Published</option>
+                            <option value="draft">Draft</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Date:</label>
+                        <select class="filter-select" id="filterDate">
+                            <option value="all">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn btn-outline" onclick="applyFilters()">
+                        Apply Filters
+                    </button>
+                </div>
+                
+                <!-- Posts Table -->
+                <div class="posts-table">
+                    <div class="table-header">
+                        <div>#</div>
+                        <div>Title</div>
+                        <div>Type</div>
+                        <div>Status</div>
+                        <div>Date</div>
+                        <div>Actions</div>
+                    </div>
+                    
+                    <!-- Post 1 -->
+                    <div class="table-row">
+                        <div>
+                            <input type="checkbox" class="post-select">
+                        </div>
+                        <div>
+                            <div class="post-title">Ethiopia Tech Growth 2024</div>
+                            <div class="post-excerpt">Analysis of technology sector growth in Ethiopia...</div>
+                        </div>
+                        <div>
+                            <span class="post-type type-news">News</span>
+                        </div>
+                        <div>
+                            <span class="post-status status-published">Published</span>
+                        </div>
+                        <div class="post-date">Mar 15, 2024</div>
+                        <div class="post-actions">
+                            <div class="action-btn edit-btn" onclick="editPost(1)">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div class="action-btn view-btn" onclick="viewPost(1)">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="action-btn delete-btn" onclick="deletePost(1)">
+                                <i class="fas fa-trash"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Post 2 -->
+                    <div class="table-row">
+                        <div>
+                            <input type="checkbox" class="post-select">
+                        </div>
+                        <div>
+                            <div class="post-title">Senior Software Engineer</div>
+                            <div class="post-excerpt">Looking for experienced developers with Python...</div>
+                        </div>
+                        <div>
+                            <span class="post-type type-job">Job</span>
+                        </div>
+                        <div>
+                            <span class="post-status status-published">Published</span>
+                        </div>
+                        <div class="post-date">Mar 14, 2024</div>
+                        <div class="post-actions">
+                            <div class="action-btn edit-btn" onclick="editPost(2)">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div class="action-btn view-btn" onclick="viewPost(2)">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="action-btn delete-btn" onclick="deletePost(2)">
+                                <i class="fas fa-trash"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Post 3 -->
+                    <div class="table-row">
+                        <div>
+                            <input type="checkbox" class="post-select">
+                        </div>
+                        <div>
+                            <div class="post-title">Tech Jobs Fair 2024</div>
+                            <div class="post-excerpt">Join us for the largest tech job fair in Ethiopia...</div>
+                        </div>
+                        <div>
+                            <span class="post-type type-event">Event</span>
+                        </div>
+                        <div>
+                            <span class="post-status status-draft">Draft</span>
+                        </div>
+                        <div class="post-date">Mar 13, 2024</div>
+                        <div class="post-actions">
+                            <div class="action-btn edit-btn" onclick="editPost(3)">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div class="action-btn view-btn" onclick="viewPost(3)">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="action-btn delete-btn" onclick="deletePost(3)">
+                                <i class="fas fa-trash"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Post 4 -->
+                    <div class="table-row">
+                        <div>
+                            <input type="checkbox" class="post-select">
+                        </div>
+                        <div>
+                            <div class="post-title">Investment Opportunities in Agriculture</div>
+                            <div class="post-excerpt">Discover profitable investment opportunities...</div>
+                        </div>
+                        <div>
+                            <span class="post-type type-news">News</span>
+                        </div>
+                        <div>
+                            <span class="post-status status-pending">Pending</span>
+                        </div>
+                        <div class="post-date">Mar 12, 2024</div>
+                        <div class="post-actions">
+                            <div class="action-btn edit-btn" onclick="editPost(4)">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div class="action-btn view-btn" onclick="viewPost(4)">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="action-btn delete-btn" onclick="deletePost(4)">
+                                <i class="fas fa-trash"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bulk Actions -->
+                <div class="bulk-actions">
+                    <div class="bulk-select">
+                        <input type="checkbox" id="selectAll">
+                        <label for="selectAll">Select All</label>
+                    </div>
+                    <select class="filter-select" id="bulkAction">
+                        <option value="">Bulk Actions</option>
+                        <option value="publish">Publish</option>
+                        <option value="draft">Move to Draft</option>
+                        <option value="delete">Delete</option>
+                        <option value="export">Export Selected</option>
+                    </select>
+                    <button class="btn btn-outline" onclick="applyBulkAction()">
+                        Apply
+                    </button>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination">
+                    <div class="page-btn active">1</div>
+                    <div class="page-btn">2</div>
+                    <div class="page-btn">3</div>
+                    <div class="page-btn">4</div>
+                    <div class="page-btn">5</div>
+                    <div class="page-btn">Next →</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/post-manager.js"></script>
+    <script>
+        // Auth check
+        if (!localStorage.getItem('admin_logged_in')) {
+            window.location.href = '../index.html';
+        }
+        
+        // Set user info
+        const username = localStorage.getItem('admin_username') || 'Admin';
+        document.getElementById('userName').textContent = username;
+        document.getElementById('userAvatar').textContent = username.charAt(0).toUpperCase();
+        
+        // Menu toggle
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.querySelector('.admin-sidebar').classList.toggle('active');
+        });
+        
+        // Navigation
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const page = this.dataset.page;
+                if (page === 'dashboard') {
+                    window.location.href = '../dashboard.html';
+                } else if (page === 'posts') {
+                    // Already here
+                } else if (page === 'create-post') {
+                    window.location.href = 'create.html';
+                } else if (page === 'admins') {
+                    window.location.href = '../users/admins.html';
+                } else {
+                    alert(`${page} page would open`);
+                }
+            });
+        });
+        
+        // Select all functionality
+        document.getElementById('selectAll').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.post-select');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+        
+        // Functions
+        function createNewPost() {
+            window.location.href = 'create.html';
+        }
+        
+        function editPost(id) {
+            window.location.href = `edit.html?id=${id}`;
+        }
+        
+        function viewPost(id) {
+            alert(`Viewing post ${id} - would open in new tab`);
+        }
+        
+        function deletePost(id) {
+            if (confirm(`Are you sure you want to delete post ${id}?`)) {
+                alert(`Post ${id} deleted`);
+                // In real app: remove from DOM and update database
+            }
+        }
+        
+        function applyFilters() {
+            const type = document.getElementById('filterType').value;
+            const status = document.getElementById('filterStatus').value;
+            const date = document.getElementById('filterDate').value;
+            const search = document.getElementById('searchPosts').value;
+            
+            alert(`Applying filters:\nType: ${type}\nStatus: ${status}\nDate: ${date}\nSearch: ${search}`);
+            // In real app: filter posts
+        }
+        
+        function applyBulkAction() {
+            const action = document.getElementById('bulkAction').value;
+            if (!action) {
+                alert('Please select a bulk action');
+                return;
+            }
+            
+            const selected = document.querySelectorAll('.post-select:checked');
+            if (selected.length === 0) {
+                alert('Please select posts to perform bulk action');
+                return;
+            }
+            
+            if (confirm(`Are you sure you want to ${action} ${selected.length} post(s)?`)) {
+                alert(`${selected.length} post(s) ${action}ed`);
+                // In real app: perform action via API
+            }
+        }
+        
+        function exportPosts() {
+            alert('Exporting posts to CSV...');
+            // In real app: generate and download CSV
+        }
+    </script>
+</body>
+</html>
